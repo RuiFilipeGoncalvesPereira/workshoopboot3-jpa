@@ -13,6 +13,8 @@ import com.ruipereira.aprendizagem.repositories.UserRepository;
 import com.ruipereira.aprendizagem.services.exceptions.DatabaseException;
 import com.ruipereira.aprendizagem.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 	
@@ -50,9 +52,14 @@ public class UserService {
 
 	public Utilizador update(Long id, Utilizador obj)
 	{
-		Utilizador entity = repository.getReferenceById(id);
-		updateData(entity,obj);
-		return repository.save(entity);
+		try  {
+				Utilizador entity = repository.getReferenceById(id);
+				updateData(entity,obj);
+				return repository.save(entity);
+		} catch (EntityNotFoundException e)
+		{
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 	private void updateData(Utilizador entity, Utilizador obj) {
