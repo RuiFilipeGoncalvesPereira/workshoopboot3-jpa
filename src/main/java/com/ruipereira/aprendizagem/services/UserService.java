@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ruipereira.aprendizagem.entities.Utilizador;
 import com.ruipereira.aprendizagem.repositories.UserRepository;
+import com.ruipereira.aprendizagem.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
@@ -24,7 +25,7 @@ public class UserService {
 	public Utilizador findById(Long id)
 	{
 		Optional<Utilizador> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public Utilizador insert(Utilizador obj)
